@@ -13,7 +13,7 @@ package Objects
 			super(this, animationSheet, invertStatus, passable, spriteSize);
 		}
 		
-		public function updateEnemy(player:Player):void {
+		public function updateEnemy(player:Player, deltaTime:Number):void {
 			
 		}
 		

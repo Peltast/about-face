@@ -73,6 +73,8 @@ package
 		public static const Player:Class;
 		[Embed(source = "../lib/Anima.png")]
 		public static const Anima:Class;
+		[Embed(source = "../lib/Animus.png")]
+		public static const Animus:Class;
 		
 		[Embed(source = "../lib/Sentinel.png")]
 		public static const Sentinel:Class;
@@ -167,10 +169,14 @@ package
 		public static const EndWho2:Class;
 		
 		
+		[Embed(source = "../lib/UI/Warning.png")]
+		public static const Warning:Class;
 		[Embed(source = "../lib/UI/MenuSplash.png")]
 		public static const MenuSplash:Class;
 		[Embed(source = "../lib/UI/MenuSplash2.png")]
 		public static const MenuSplash2:Class;
+		[Embed(source = "../lib/UI/MenuSplash3.png")]
+		public static const MenuSplash3:Class;
 		[Embed(source = "../lib/UI/NewGame1.png")]
 		public static const NewGame1:Class;
 		[Embed(source = "../lib/UI/NewGame2.png")]
@@ -226,6 +232,8 @@ package
 		public static const Talk:Class;
 		[Embed(source = "../lib/Sound/Talk2.mp3")]
 		public static const Talk2:Class;
+		[Embed(source = "../lib/Sound/Talk3.mp3")]
+		public static const Talk3:Class;
 		[Embed(source = "../lib/Sound/Pickup.mp3")]
 		public static const PickupSound:Class;
 		[Embed(source = "../lib/Sound/Death.mp3")]
@@ -251,6 +259,10 @@ package
 		public static const FinalLightTheme:Class;
 		[Embed(source = "../lib/Sound/Final Dark Theme.mp3")]
 		public static const FinalDarkTheme:Class;
+		[Embed(source = "../lib/Sound/End Light.mp3")]
+		public static const EndLight:Class;
+		[Embed(source = "../lib/Sound/End Dark.mp3")]
+		public static const EndDark:Class;
 		
 		
 		private static var singleton:GameLoader;

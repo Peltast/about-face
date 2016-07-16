@@ -16,7 +16,7 @@ package Cinematics
 		
 		protected var hostMap:Map;
 		private var cinematicTexts:Array;
-		private var animus:Animus;
+		private var animus:Anima;
 		private var currentText:int;
 		private var currentTextbox:Textbox;
 		
@@ -53,7 +53,7 @@ package Cinematics
 			currentTextbox = new Textbox(cinematicTexts[currentText], true, true, false, "Talk");
 			Game.getState().peekOverlay().addToOverlay(currentTextbox);
 			
-			animus = new Animus(player.getInvertStatus());
+			animus = new Anima(player.getInvertStatus());
 			animus.x = player.x + 72;
 			animus.y = player.y - 24;
 			animus.alpha = 0;

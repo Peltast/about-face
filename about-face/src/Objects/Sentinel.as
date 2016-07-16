@@ -47,15 +47,16 @@ package Objects
 				switchInverted();
 		}
 		
-		override public function updateEnemy(player:Player):void 
+		override public function updateEnemy(player:Player, deltaTime:Number):void 
 		{
-			super.updateEnemy(player);
+			super.updateEnemy(player, deltaTime);
 			
 			currentAnimation.updateAnimation();
 			removeBmp();
 			addAnimationBmp(currentAnimation);
 			
-			updateMovement(player);
+			var relativeTime:Number = ((deltaTime / 1000) * Main.frameRate);
+			updateMovement(player, relativeTime);
 		}
 		
 		override public function resetEnemy():void 
@@ -68,39 +69,39 @@ package Objects
 				this.y = originPoint;
 		}
 		
-		private function updateMovement(player:Player):void {
+		private function updateMovement(player:Player, relativeTime:Number):void {
 			
 			var targetPos:int;
 			var delta:int;
 			
 			if (horizontal) {	
 				targetPos = player.x;
-				delta = targetPos - this.x;
+				delta = (targetPos - this.x);
 				
-				followPlayer(delta);
+				followPlayer(delta, relativeTime);
 			}
 			else {
 				
 				targetPos = player.y;
-				delta = targetPos - this.y;
+				delta = (targetPos - this.y);
 				
-				followPlayer(delta);
+				followPlayer(delta, relativeTime);
 			}
 			
 		}
 		
-		private function followPlayer(delta:int):void {
+		private function followPlayer(delta:int, relativeTime:Number):void {
 			if (Math.abs(delta) <= 3) return;
 			
 			if (horizontal) {	
-				this.x += getVelocityDirection(delta);
+				this.x += getVelocityDirection(delta) * relativeTime;
 				if (this.x > endPos)
 					this.x = endPos;
 				else if (this.x < startPos)
 					this.x = startPos;
 			}
 			else {
-				this.y += getVelocityDirection(delta);
+				this.y += getVelocityDirection(delta) * relativeTime;
 				if (this.y > endPos)
 					this.y = endPos;
 				else if (this.y < startPos)

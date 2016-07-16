@@ -43,6 +43,7 @@ package UI
 		}
 		
 		public function isActive():Boolean { return active; }
+		public function containsOverlayItem(item:OverlayItem):Boolean { return overlaySprite.contains(item); }
 		
 		public function addToOverlay(overlayItem:OverlayItem):void {
 			overlayItem.setOverlay(this);

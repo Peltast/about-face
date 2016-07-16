@@ -34,7 +34,8 @@ package Core
 		
 		public function drawState():void {
 			
-			overlayStack.peekStack().updateOverlay();
+			if (overlayStack.peekStack() != null)
+				overlayStack.peekStack().updateOverlay();
 		}
 		
 		public function addOverlay(newOverlay:Overlay):void {

@@ -96,7 +96,7 @@ package Core
 		}
 		public function setGameVictory():void {
 			gameBeaten = true;
-			SaveManager.getSingleton().saveGame();
+			SaveManager.getSingleton().saveGame(true);
 		}
 		
 		public function saveGameProgress(saveFile:SaveFile):void {

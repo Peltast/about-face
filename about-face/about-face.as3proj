@@ -6,8 +6,8 @@
     <movie input="" />
     <movie path="bin\about-face.swf" />
     <movie fps="60" />
-    <movie width="480" />
-    <movie height="320" />
+    <movie width="840" />
+    <movie height="600" />
     <movie version="14" />
     <movie minorVersion="0" />
     <movie platform="Flash Player" />

@@ -49,14 +49,14 @@ package Core
 				[new GameLoader.Credits2() as Bitmap], false);
 			mainMenu.addMenuItem(newGameButton);
 			
-			if (saveFile.loadData("init") != null)
+			if (saveFile.loadData("init") != null && (saveFile.loadData("gameBeaten") == null || saveFile.loadData("newGamePlus") != null) )
 				mainMenu.addMenuItem(continueGameButton);
 			mainMenu.addMenuItem(creditsButton);
 			
-			mainMenu.addMenuItem(new Button("Test", 24, new Rectangle(), [0xffffff], [0x0], false));
+			mainMenu.addMenuItem(new Button("Testjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj", 24, new Rectangle(), [0xffffff], [0x0], false));
 			
-			mainMenu.x = Main.stageWidth / 2 - mainMenu.width / 2;
-			mainMenu.y = (Main.stageHeight / 2 - mainMenu.height / 2) - 20;
+			mainMenu.x = Main.stageWidth / (2 * Main.stageScale) - mainMenu.getMenuWidth() / 2 - 10;
+			mainMenu.y = (Main.stageHeight / (2 * Main.stageScale) - mainMenu.getMenuHeight() / 2) - 10;// - (20 * Main.stageScale);
 			
 			startOverlay.addToOverlay(mainMenu);
 			this.addOverlay(startOverlay);

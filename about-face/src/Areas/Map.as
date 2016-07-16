@@ -331,6 +331,10 @@ package Areas
 		public function setNextMap(map:Map):void {
 			nextMap = map;
 		}
+		public function changeTheme(lightTheme:String, darkTheme:String):void {
+			this.lightTheme = lightTheme;
+			this.darkTheme = darkTheme;
+		}
 		public function addAltNextMap(x:int, y:int, map:Map):void {
 			altEndPoint = ObjectFactory.getSingleton().createPortal();
 			altEndPoint.x = x * tileSize;
@@ -349,16 +353,16 @@ package Areas
 		}
 		
 		
-		public function updateMap():void {
+		public function updateMap(deltaTime:Number):void {
 			
-			player.updatePlayer();
+			player.updatePlayer(deltaTime);
 			
 			if (endPoint != null)
 				endPoint.updatePortal();
 			if (altEndPoint != null)
 				altEndPoint.updatePortal();
 			for each(var enemy:Enemy in enemies) {
-				enemy.updateEnemy(player);
+				enemy.updateEnemy(player, deltaTime);
 			}
 			for each(var pickup:Pickup in pickups) {
 				pickup.updatePickup(player, this);
@@ -416,7 +420,10 @@ package Areas
 		public function startMapMusic():void {
 			SoundManager.getSingleton().playSound(lightTheme, 1, true);
 			SoundManager.getSingleton().playSound(darkTheme, 1, true);
-			SoundManager.getSingleton().pauseSound(darkTheme);
+			if (mapInvertStatus < 0)
+				SoundManager.getSingleton().pauseSound(darkTheme);
+			else
+				SoundManager.getSingleton().pauseSound(lightTheme);
 		}
 		public function stopMapMusic():void {
 			SoundManager.getSingleton().stopSound(lightTheme);

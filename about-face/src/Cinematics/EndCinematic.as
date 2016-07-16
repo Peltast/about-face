@@ -1,6 +1,7 @@
 package Cinematics 
 {
 	import Areas.Map;
+	import Core.EndState;
 	import Core.Game;
 	import Core.MenuState;
 	import flash.display.Shape;
@@ -20,13 +21,14 @@ package Cinematics
 		private var invertTimer:int;
 		private var startTimer:int;
 		
+		
 		public function EndCinematic(hostMap:Map, cinematicTexts:Array) 
 		{
 			super(hostMap, cinematicTexts);
 			
 			startTimer = 300;
-			invertFrequencies = new Array(610, 377, 233, 144, 144, 89, 89, 
-											55, 55, 34, 34, 21, 21, 13, 13, 8, 8, 5, 5, 3, 3, 2, 2, 1, 1);
+			invertFrequencies = new Array(610, 377, 233, 144, 89, 
+											55, 34, 34, 21, 21, 13, 13, 8, 8, 5, 5, 3, 3, 2, 1);
 			currentFrequency = 0;
 			invertTimer = 0;
 			
@@ -43,12 +45,18 @@ package Cinematics
 			isPlaying = true;
 			hasPlayed = true;
 			player.permafreezePlayer();
+			player.setInEndCinematic(true);
+			hostMap.stopMapMusic();
+			hostMap.changeTheme("End Light", "End Dark");
+			hostMap.startMapMusic();
 			
 			Main.getSingleton().addEventListener(Event.ENTER_FRAME, updateCinematic);
 		}
 		
 		override protected function updateCinematic(event:Event):void 
 		{
+	//		closeCinematic();
+	//		return;
 			if (currentFrequency >= invertFrequencies.length - 1) {
 				hostMap.invertMap();
 				fadeOut();
@@ -66,11 +74,12 @@ package Cinematics
 		}
 		
 		public function fadeOut():void {
-			if (!hostMap.contains(fadeoutShape))
-				hostMap.addChild(fadeoutShape);
+			//if (!hostMap.contains(fadeoutShape))
+			//	Game.getState().addChild(fadeoutShape);
 			
-			if (fadeoutShape.alpha < 1)
-				fadeoutShape.alpha = fadeoutShape.alpha + .005;
+			if (fadeoutShape.alpha < 1) {	
+				fadeoutShape.alpha = fadeoutShape.alpha + .01;
+			}
 			else if (fadeoutShape.alpha >= 1)
 				closeCinematic();
 		}
@@ -80,11 +89,12 @@ package Cinematics
 			if (!isPlaying) return;
 			
 			isPlaying = false;
+			tempPlayer.setInEndCinematic(false);
 			Main.getSingleton().removeEventListener(Event.ENTER_FRAME, updateCinematic);
 			
 			Game.getSingleton().setGameVictory();
 			Game.popState();
-			Game.pushState(new MenuState());
+			Game.pushState(new EndState());
 		}
 		
 	}

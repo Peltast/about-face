@@ -3,6 +3,7 @@ package
 	import Core.Game;
 	import Core.GameState;
 	import Core.MenuState;
+	import Core.SplashState;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.display.StageQuality;
@@ -27,6 +28,8 @@ package
 		
 		public static var stageWidth:int;
 		public static var stageHeight:int;
+		public static var stageScale:Number;
+		public static var frameRate:Number;
 		
 		private static var singleton:Main;
 		public static function getSingleton():Main {
@@ -50,9 +53,13 @@ package
 			
 			stageWidth = this.stage.stageWidth;
 			stageHeight = this.stage.stageHeight;
-			
+			this.scaleX = 2;
+			this.scaleY = 2;
+			stageScale = this.scaleX;
+			frameRate = stage.frameRate;
+			//stage.frameRate = 30;
 			this.addChild(Game.getSingleton());
-			Game.pushState(new MenuState());
+			Game.pushState(new SplashState());
 			
 		}
 		

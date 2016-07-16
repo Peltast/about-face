@@ -34,8 +34,8 @@ package Core
 									new ButtonEffect("EndGame", [gameState])],
 									[new GameLoader.ExitGame2() as Bitmap], false));
 			
-			pauseMenu.x = Main.stageWidth / 2 - 90;
-			pauseMenu.y = Main.stageHeight / 2 - pauseMenu.height / 2 - 50;
+			pauseMenu.x = Main.stageWidth / (2 * Main.stageScale) - 90;
+			pauseMenu.y = Main.stageHeight / (2 * Main.stageScale) - pauseMenu.height / 2 - 50;
 			
 			soundButton = new BmpButton(new GameLoader.SoundButton() as Bitmap, new Rectangle(), true,
 										[new ButtonEffect("ToggleSound", [])],
@@ -49,7 +49,7 @@ package Core
 			
 			soundMenu.addMenuItem(soundButton);
 			soundMenu.addMenuItem(musicButton);
-			soundMenu.x = Main.stageWidth - 75;
+			soundMenu.x = (Main.stageWidth / Main.stageScale) - 75;
 			soundMenu.y = 10;
 			
 			this.addToOverlay(pauseMenu);

@@ -41,6 +41,7 @@ package Objects
 		
 		private var deathTimer:int;
 		private var playerFrozen:Boolean;
+		private var endCinematic:Boolean;
 		private var physicsDisabled:Boolean;
 		
 		public function Player(saveFile:SaveFile) 
@@ -146,17 +147,18 @@ package Objects
 			Main.getSingleton().stage.addEventListener(KeyboardEvent.KEY_DOWN, checkKeysDown);	
 		}
 			
-		public function updatePlayer():void {
-			
+		public function updatePlayer(deltaTime:Number):void {
+			var relativeTime:Number = ((deltaTime / 1000) * Main.frameRate);
+			//trace("=======" + relativeTime);
 			currentAnimation.updateAnimation();
 			removeBmp();
 			addAnimationBmp(currentAnimation);
 			
 			centerScreen();
 			if (!physicsDisabled) {	
-				updateVelocity();
-				moveXAxis();
-				moveYAxis();
+				updateVelocity(relativeTime);
+				moveXAxis(relativeTime);
+				moveYAxis(relativeTime);
 			}
 			
 			currentMap.updateCheckpoints(this);
@@ -168,9 +170,9 @@ package Objects
 		
 		private function centerScreen():void {
 			
-			var screenHeight:Number = 320;
-			var screenWidth:Number = 480;
-			var scale:int = 1;
+			var screenHeight:Number = Main.stageHeight;
+			var screenWidth:Number = Main.stageWidth;
+			var scale:int = Main.stageScale;
 			screenHeight = screenHeight / scale;
 			screenWidth = screenWidth / scale;
 			
@@ -189,8 +191,8 @@ package Objects
 				
 				if (currentMap.x > 0)	// Don't go beyond the map's left border.
 					currentMap.x = 0;
-				else if (this.x + screenWidth / 2 > mapWidth)  // And don't go beyond the map's right border.
-					currentMap.x = screenWidth - mapWidth;
+				else if (this.x + screenWidth / 2 > mapWidth / scale)  // And don't go beyond the map's right border.
+					currentMap.x = screenWidth - (mapWidth / scale);
 			}
 			
 			// If the map is shorter than the screen, just center Y-axis around the map.
@@ -203,22 +205,22 @@ package Objects
 				
 				if (currentMap.y > 0)	// Don't go beyond the map's top border.
 					currentMap.y = 0;
-				else if (this.y + screenHeight / 2 > mapHeight)	// And don't go beyond the map's lower border.
-					currentMap.y = screenHeight - mapHeight;
+				else if (this.y + screenHeight / 2 > mapHeight / scale)	// And don't go beyond the map's lower border.
+					currentMap.y = screenHeight - (mapHeight / scale);
 				
 			}
 			
 	}
 		
-		private function updateVelocity():void {
+		private function updateVelocity(relativeTime:Number):void {
 			
-			xVel = targetXVel * xAcc + (1 - xAcc) * xVel;
+			xVel = (targetXVel * xAcc * relativeTime) + ((1 - xAcc) * xVel);
 			if (xVel > maxSpeedX)
 				xVel = maxSpeedX;
 			else if (xVel < -maxSpeedX)
 				xVel = -maxSpeedX;
 			
-			yVel = targetYVel * yAcc + (1 - yAcc) * yVel;
+			yVel = (targetYVel * yAcc * relativeTime) + ((1 - yAcc) * yVel);
 			if (yVel > maxSpeedY)
 				yVel = maxSpeedY;
 			else if (yVel < -maxSpeedY)
@@ -226,10 +228,12 @@ package Objects
 			
 			targetYVel = gravity;
 		}
-		private function moveXAxis():void {
+		private function moveXAxis(relativeTime:Number):void {
 			if (deathTimer != 0) return;
 			
-			this.x += Math.round(xVel);
+			var deltaX:int = Math.round(xVel * relativeTime);
+			if (deltaX > 8) deltaX = 8;
+			this.x += deltaX;
 			
 			var collisions:Vector.<InversionObject> = currentMap.checkCollisions(this);
 			if (checkDeath(collisions, true))
@@ -240,10 +244,12 @@ package Objects
 			if (largestDistance != 0)
 				this.x -= largestDistance;
 		}
-		private function moveYAxis():void {
+		private function moveYAxis(relativeTime:Number):void {
 			if (deathTimer != 0) return;
 			
-			this.y += Math.round(yVel);
+			var deltaY:int = Math.round(yVel * relativeTime);
+			if (deltaY > 8) deltaY = 8;
+			this.y += deltaY;
 			
 			var collisions:Vector.<InversionObject> = currentMap.checkCollisions(this);
 			if (checkDeath(collisions, false))
@@ -267,6 +273,8 @@ package Objects
 			physicsDisabled = true;
 		}
 		public function setInCinematic(b:Boolean):void { playerFrozen = b; }
+		public function isInEndCinematic():Boolean { return endCinematic; }
+		public function setInEndCinematic(b:Boolean):void { endCinematic = b; }
 		public function stopPlayerInput():void {
 			Main.getSingleton().stage.removeEventListener(KeyboardEvent.KEY_UP, checkKeysUp);
 			Main.getSingleton().stage.removeEventListener(KeyboardEvent.KEY_DOWN, checkKeysDown);
@@ -377,7 +385,7 @@ package Objects
 		public function getCurrentMap():Areas.Map { return currentMap; }
 		public function setCurrentMap(map:Areas.Map):void { currentMap = map; }
 		
-		
+		private var spacebarHeld:Boolean = false;
 		private function checkKeysDown(key:KeyboardEvent):void {
 			
 			if (key.keyCode == 65 || key.keyCode == 37)
@@ -385,8 +393,10 @@ package Objects
 			else if (key.keyCode == 68 || key.keyCode == 39)
 				goRight();
 			
-			if (key.keyCode == 32) 
+			if (key.keyCode == 32 && !spacebarHeld) {
+				spacebarHeld = true;
 				jump();
+			}
 			
 		}
 		private function checkKeysUp(key:KeyboardEvent):void {
@@ -396,6 +406,8 @@ package Objects
 			else if(key.keyCode == 68 || key.keyCode == 39)
 				stopRight();
 			
+			if (key.keyCode == 32)
+				spacebarHeld = false;
 		}
 		
 		private function goLeft():void {

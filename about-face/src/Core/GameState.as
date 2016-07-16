@@ -5,6 +5,8 @@ package Core
 	import flash.display.Shape;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
+	import flash.utils.Timer;
+	import flash.utils.getTimer;
 	import Objects.Player;
 	import Setup.SaveFile;
 	import Setup.SaveManager;
@@ -24,6 +26,9 @@ package Core
 		
 		private var gameOverlay:Overlay;
 		private var pauseOverlay:Overlay;
+		private var lastFrameTime:Number;
+		
+		private var gameEnding:Boolean;
 		
 		public function GameState(saveFile:SaveFile = null) 
 		{
@@ -50,6 +55,7 @@ package Core
 			
 			this.addOverlay(gameOverlay);
 			
+			lastFrameTime = getTimer();
 		}
 		override public function activateState():void 
 		{
@@ -85,6 +91,16 @@ package Core
 		override public function drawState():void 
 		{
 			super.drawState();
+			
+			var currentTime:Number = getTimer();
+			var deltaTime:Number = currentTime - lastFrameTime;
+			
+			//trace(deltaTime);
+			mapManager.getCurrentMap().updateMap(deltaTime);
+			
+			lastFrameTime = getTimer();
+			
+			listenForGameEnd();
 		}
 		
 		private function unFocus(focusEvent:Event):void {
@@ -115,6 +131,23 @@ package Core
 			if (ControlsManager.getSingleton().getKey(keyName) == keyCode)
 				return true;
 			return false;
+		}
+		
+		private function listenForGameEnd():void {
+			if (player.isInEndCinematic() && !gameEnding) {
+				gameEnding = true;
+				swapGlitchPauseOverlay(true);
+			}
+			else if (!player.isInEndCinematic() && gameEnding) {
+				swapGlitchPauseOverlay(false);
+				gameEnding = false;
+			}
+		}
+		private function swapGlitchPauseOverlay(glitch:Boolean):void {
+			if (glitch)
+				pauseOverlay = new EndPauseOverlay(overlayStack);
+			else
+				pauseOverlay = new PauseOverlay(overlayStack, this);
 		}
 	}
 

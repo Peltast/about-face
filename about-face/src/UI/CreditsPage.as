@@ -20,19 +20,19 @@ package UI
 			super(this, false);
 			
 			creditsImage = new GameLoader.CreditPage1() as Bitmap;
-			creditsImage.x = Main.stageWidth / 2 - creditsImage.width / 2;
-			creditsImage.y = 0;
+			creditsImage.x = Main.stageWidth / (2 * Main.stageScale) - creditsImage.width / 2;
+			creditsImage.y = -10;
 			
 			websiteButton = new BmpButton(new GameLoader.CreditPage2() as Bitmap, new Rectangle(), false, 
 											[new ButtonEffect("GoToSite", ["http://www.peltastsoftware.com"])],
 											[new GameLoader.CreditPage3() as Bitmap], false);
-			websiteButton.x = Main.stageWidth / 2 - websiteButton.width / 2;
-			websiteButton.y = (Main.stageHeight / 2) - (websiteButton.height / 2) + 50;
+			websiteButton.x = Main.stageWidth / (2 * Main.stageScale) - websiteButton.width / 2;
+			websiteButton.y = Main.stageHeight / (2 * Main.stageScale) - (websiteButton.height / 2) + 50;
 			
 			backButton = new BmpButton(new GameLoader.CreditsExit1() as Bitmap, new Rectangle(), false,
 											[new ButtonEffect("RemoveOverlay", [overlayStack])],
 											[new GameLoader.CreditsExit2() as Bitmap], false);
-			backButton.x = Main.stageWidth - backButton.width - 10;
+			backButton.x = Main.stageWidth / Main.stageScale - backButton.width - 10;
 			backButton.y = 10;
 			
 			this.addChild(creditsImage);

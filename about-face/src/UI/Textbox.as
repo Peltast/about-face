@@ -26,8 +26,10 @@ package UI
 		private var scrollSpeed:int;
 		private var scrollCount:int;
 		private var textSound:String;
+		private var skippable:Boolean;
 		
-		public function Textbox(text:String, borders:Boolean, scroll:Boolean = true, inverted:Boolean = false, textSound:String = "") 
+		public function Textbox(text:String, borders:Boolean, 
+								scroll:Boolean = true, inverted:Boolean = false, textSound:String = "", skippable:Boolean = true) 
 		{
 			super(this, false);
 			
@@ -36,6 +38,7 @@ package UI
 			this.scroll = scroll;
 			this.textSound = textSound;
 			this.exitAlphaSwitch = true;
+			this.skippable = skippable;
 			
 			textFormat = new TextFormat("FFEstudio");
 			if (inverted)
@@ -60,9 +63,9 @@ package UI
 				bgBox.graphics.beginFill(0xffffff, 1);
 			else
 				bgBox.graphics.beginFill(0x000000, 1);
-			bgBox.graphics.drawRect(0, 0, 240, 80);
+			bgBox.graphics.drawRect(0, 0, Main.stageWidth / 2.5, 80);
 			bgBox.graphics.endFill();
-			bgBox.x = 120;
+			bgBox.x = Main.stageWidth / (2 * Main.stageScale) - (bgBox.width / 2);
 			bgBox.y = 0;
 			
 			this.addChild(bgBox);
@@ -135,14 +138,14 @@ package UI
 			
 			var currentPosition:int = textField.text.length;
 			textField.appendText(text.charAt(currentPosition));
-			textField.width = textField.textWidth + 5;
+			textField.width = textField.textWidth + 10;
 			
 			if (textSound != "")
 				SoundManager.getSingleton().playSound(textSound, 1);
 			
-			if (textField.width > bgBox.width - int(textField.defaultTextFormat)) {	
+			if (textField.width > bgBox.width - int(textField.defaultTextFormat) * Main.stageScale) {	
 				textField.wordWrap = true;
-				textField.width = bgBox.width - int(textField.defaultTextFormat.size);
+				textField.width = bgBox.width - int(textField.defaultTextFormat.size) * Main.stageScale;
 				textField.height = bgBox.height;
 			}
 		}
@@ -152,27 +155,31 @@ package UI
 			Main.getSingleton().stage.addEventListener(KeyboardEvent.KEY_UP, endText);
 		}
 		private function skipText(key:KeyboardEvent):void {
+			if (!skippable) return;
+			
 			if (key.keyCode == Keyboard.SPACE) {
 				
 				textField.text = text;
-				textField.width = textField.textWidth;
-				if (textField.width > bgBox.width - int(textField.defaultTextFormat)) {	
+				textField.width = textField.textWidth + 10;
+				if (textField.width > bgBox.width - int(textField.defaultTextFormat) * Main.stageScale) {	
 					textField.wordWrap = true;
-					textField.width = bgBox.width - int(textField.defaultTextFormat.size);
+					textField.width = bgBox.width - int(textField.defaultTextFormat.size) * Main.stageScale;
 					textField.height = bgBox.height;
 				}
 				finishScroll();
+				
+				Main.getSingleton().stage.removeEventListener(KeyboardEvent.KEY_UP, skipText);
 			}
 			
-			Main.getSingleton().removeEventListener(KeyboardEvent.KEY_UP, skipText);
 		}
 		private function endText(key:KeyboardEvent):void {
 			
 			if (key.keyCode == Keyboard.LEFT || key.keyCode == Keyboard.RIGHT || key.keyCode == Keyboard.UP || key.keyCode == Keyboard.W
 				|| key.keyCode == Keyboard.A || key.keyCode == Keyboard.D || key.keyCode == Keyboard.J || key.keyCode == Keyboard.K
 				|| key.keyCode == Keyboard.SPACE) {
-					Main.getSingleton().removeEventListener(KeyboardEvent.KEY_UP, endText);
-					Main.getSingleton().removeEventListener(KeyboardEvent.KEY_UP, skipText);
+					if (textField.text != text) return;
+					Main.getSingleton().stage.removeEventListener(KeyboardEvent.KEY_UP, endText);
+					Main.getSingleton().stage.removeEventListener(KeyboardEvent.KEY_UP, skipText);
 					Game.getState().peekOverlay().removeFromOverlay(this);
 				}
 		}

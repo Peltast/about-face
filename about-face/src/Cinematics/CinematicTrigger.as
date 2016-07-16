@@ -12,11 +12,13 @@ package Cinematics
 		
 		private var cinematic:Cinematic;
 		private var bounds:Rectangle;
+		private var triggered:Boolean;
 		
 		public function CinematicTrigger(cinematic:Cinematic, bounds:Rectangle) 
 		{
 			this.cinematic = cinematic;
 			this.bounds = bounds;
+			this.triggered = false;
 		}
 		
 		public function getCinematicBounds():Rectangle {
@@ -26,8 +28,10 @@ package Cinematics
 		public function updateTrigger(player:Player):void {
 			
 			if (bounds.containsPoint(new Point(player.x, player.y)))
-				cinematic.playCinematic(player);
-			
+				if(!triggered){
+					triggered = true;
+					cinematic.playCinematic(player);
+				}			
 		}
 		
 	}

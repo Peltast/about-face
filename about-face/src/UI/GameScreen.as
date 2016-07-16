@@ -27,7 +27,6 @@ package UI
 		override public function updateOverlayItem():void 
 		{
 			
-			mapManager.getCurrentMap().updateMap();
 		}
 		
 		override public function activateOverlayItem():void 

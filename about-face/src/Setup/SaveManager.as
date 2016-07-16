@@ -64,22 +64,25 @@ package Setup
 		public function saveGameConfig():void {
 			
 		}
-		public function saveGame():void {
+		public function saveGame(newgame:Boolean = false):void {
 			if (currentSave < 0 ) throw new Error("Attempt to save a game when the save slot was not instantiated.");
 			
 			var saveFile:SaveFile = saveFiles[currentSave];
 			
 			saveFile.beginSave();
 			
+			if (saveFile.loadData("gameBeaten") != null && saveFile.loadData("newGamePlus") == null)
+				saveFile.saveData("newGamePlus", 1);
 			saveFile.saveData("init", 1);
 			
 			mapManager.saveGame(saveFile);
 			player.savePlayer(saveFile);
 			Game.getSingleton().saveGameProgress(saveFile);
+			if (newgame)
+				saveFile.saveData("newGamePlus", null);
 			
 			saveFile.finishSave();
 		}
-		
 		
 	}
 

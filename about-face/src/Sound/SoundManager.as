@@ -73,6 +73,8 @@ package Sound
 			musicDictionary["Hard Dark Theme"] = new GameLoader.HardDarkTheme() as Sound;
 			musicDictionary["Final Light Theme"] = new GameLoader.FinalLightTheme() as Sound;
 			musicDictionary["Final Dark Theme"] = new GameLoader.FinalDarkTheme() as Sound;
+			musicDictionary["End Light"] = new GameLoader.EndLight() as Sound;
+			musicDictionary["End Dark"] = new GameLoader.EndDark() as Sound;
 			
 			soundDictionary["Jump"] = new GameLoader.Jump() as Sound;
 			soundDictionary["Fall"] = new GameLoader.Fall() as Sound;
@@ -81,6 +83,7 @@ package Sound
 			soundDictionary["Checkpoint"] = new GameLoader.CheckpointSound() as Sound;
 			soundDictionary["Talk"] = new GameLoader.Talk() as Sound;
 			soundDictionary["Talk2"] = new GameLoader.Talk2() as Sound;
+			soundDictionary["Talk3"] = new GameLoader.Talk3() as Sound;
 			soundDictionary["Pickup"] = new GameLoader.PickupSound() as Sound;
 			soundDictionary["Death"] = new GameLoader.Death() as Sound;
 			soundDictionary["Hover"] = new GameLoader.Hover() as Sound;

@@ -70,8 +70,8 @@ package
 			playButton.borderColor = 0xFFFFFF;
 			playButton.width = playButton.textWidth + 5;
 			playButton.height = playButton.textHeight + 5;
-			playButton.x = Math.ceil(240 - playButton.width/2);
-			playButton.y = 200;
+			playButton.x = Math.ceil( (stageWidth  / 2) - (playButton.width / 2) );
+			playButton.y = 200 * 2;
 			
 			
 			loadPercent = 0;
